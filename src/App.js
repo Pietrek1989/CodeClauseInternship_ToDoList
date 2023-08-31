@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./index.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import Doing from "./components/Doing";
+import Done from "./components/Done";
+import Nav from "./components/Nav";
+import ToDo from "./components/ToDo";
+import { Button, Container } from "react-bootstrap";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App d-flex flex-column">
+      <div>
+        <Nav />
+      </div>
+      <Container>
+        <Button>+</Button>
+      </Container>
+
+      <Container className="d-flex ">
+        <ToDo />
+        <Doing />
+        <Done />
+      </Container>
     </div>
   );
-}
+};
 
 export default App;
