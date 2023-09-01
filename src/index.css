@@ -15,6 +15,7 @@ code {
 div h3 {
   text-align: center !important;
   color: white;
+  background-color: #fe789a;
 }
 .App {
   height: 100vh;
@@ -26,8 +27,9 @@ div h3 {
   padding: 10px;
   border-radius: 10px;
   width: 300px;
+  flex-wrap: wrap;
 }
-.to-do-container {
+/* .to-do-container {
   background-color: #b254a7;
 }
 .doing-container {
@@ -35,14 +37,17 @@ div h3 {
 }
 .done-container {
   background-color: #fe789a;
-}
+} */
 
 .task-item {
   background-color: #8454b2;
   margin-block: 10px;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .add-task-button {
-  background-color: #fe78d0 !important;
+  background-color: #b254a7 !important;
   border: none !important;
   margin-top: 1em;
 }
@@ -57,4 +62,18 @@ div h3 {
   margin-top: 10px;
   margin-inline: auto;
   padding-bottom: 2em;
+}
+.text-color {
+  color: #b254a7;
+}
+.modal-title {
+  color: #b254a7 !important;
+}
+.post-button {
+  background-color: #fe78d0 !important;
+  border: none !important;
+}
+.post-button:hover {
+  background-color: #e269b8 !important;
+  scale: 1.05;
 }

@@ -27,7 +27,7 @@ const DraggableTask = ({ task, index, column, moveTask }) => {
   return (
     <div
       ref={ref[1]}
-      className={`task-item rounded p-2 text-light text-center ${
+      className={`task-item rounded p-2 text-light text-center  ${
         isDragging ? "dragging" : ""
       }`}
       style={{
@@ -41,8 +41,8 @@ const DraggableTask = ({ task, index, column, moveTask }) => {
           <img
             src={task.file}
             alt="task-related-file"
-            width="50"
-            height="50"
+            width="75"
+            height="75"
             className="m-3"
           />
         </>

@@ -21,14 +21,14 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
   return (
     <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Create a Task</Modal.Title>
+        <Modal.Title className="text-color">Create a Task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex flex-column mx-2 my-2">
           <div className="form-outline">
             <Form>
               <Form.Group className="form-outline">
-                <br></br>
+                <p className="text-color">Name:</p>
                 <Form.Control
                   id="textAreaExample"
                   as="textarea"
@@ -43,7 +43,9 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
                 />
               </Form.Group>
               <Form.Group className="form-outline mt-2">
-                <Form.Label>GIF for GIF</Form.Label>
+                <Form.Label className="text-color">
+                  Keyword for GIF(optional)
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter a gIF for GIF"
@@ -56,11 +58,7 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-
-        <Button variant="primary" onClick={handlePost}>
+        <Button className="post-button" onClick={handlePost}>
           POST
         </Button>
       </Modal.Footer>
