@@ -16,6 +16,9 @@ div h3 {
   text-align: center !important;
   color: white;
 }
+.App {
+  height: 100vh;
+}
 /* .big-container-task {
   width: 90vw;
 } */
@@ -48,4 +51,10 @@ div h3 {
 }
 .dragging {
   cursor: grabbing !important;
+}
+.bin {
+  color: red;
+  margin-top: 10px;
+  margin-inline: auto;
+  padding-bottom: 2em;
 }

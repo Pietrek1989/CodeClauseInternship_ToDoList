@@ -5,7 +5,7 @@ import { Button, Container } from "react-bootstrap";
 import InputModal from "./components/InputModal";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { HiPlus } from "react-icons/hi";
+import { HiPlus, HiTrash } from "react-icons/hi";
 
 const ItemType = {
   TASK: "TASK",
@@ -62,7 +62,6 @@ const DroppableTaskList = ({ tasks, title, moveTask }) => {
   return (
     <div className="task-list-wrapper" ref={ref}>
       {" "}
-      {/* Wrapped entire list and title with ref */}
       <h3>{title}</h3>
       <div className="task-list">
         {tasks.map((task, i) => (
@@ -79,6 +78,20 @@ const DroppableTaskList = ({ tasks, title, moveTask }) => {
   );
 };
 
+const DroppableBin = ({ deleteTask }) => {
+  const [, ref] = useDrop({
+    accept: ItemType.TASK,
+    drop: (item) => {
+      deleteTask(item.index, item.column);
+    },
+  });
+
+  return (
+    <div ref={ref} className="bin">
+      <HiTrash size={40} />
+    </div>
+  );
+};
 const App = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -92,13 +105,12 @@ const App = () => {
     return { todo: [], doing: [], done: [] };
   });
 
-  // Update localStorage whenever tasks state changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (newTask, file, gifUrl) => {
-    const taskObject = { text: newTask, file, gifUrl };
+  const addTask = (newTask, file) => {
+    const taskObject = { text: newTask, file };
     setTasks((prevTasks) => ({
       ...prevTasks,
       todo: [...prevTasks.todo, taskObject],
@@ -125,45 +137,56 @@ const App = () => {
     setTasks(newTasks);
   };
 
+  const deleteTask = (fromIndex, fromColumn) => {
+    const newTasks = { ...tasks };
+    const fromKey = mapTitleToStateKey(fromColumn);
+    newTasks[fromKey].splice(fromIndex, 1);
+    setTasks(newTasks);
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="App d-flex flex-column">
-        <Container className="text-center">
-          <Button onClick={handleShow} className="w-100 add-task-button">
-            ADD NEW <HiPlus />
-          </Button>
-        </Container>
-        <Container className="d-flex justify-content-between text-center big-container-task w-100">
-          <div className="to-do-container taks-containers">
-            <DroppableTaskList
-              tasks={tasks.todo}
-              title="To Do"
-              moveTask={moveTask}
-            />
-          </div>
-          <div className="doing-container taks-containers">
-            <DroppableTaskList
-              tasks={tasks.doing}
-              title="Doing"
-              moveTask={moveTask}
-            />
-          </div>
+      <div className="d-flex flex-column justify-content-between h-screen App">
+        <div className=" d-flex flex-column">
+          <Container className="text-center w-100 d-flex justify-content-between align-items-center">
+            <Button onClick={handleShow} className="w-100 add-task-button">
+              ADD NEW <HiPlus />
+            </Button>
+          </Container>
+          <Container className="d-flex justify-content-between text-center big-container-task w-100">
+            <div className="to-do-container taks-containers">
+              <DroppableTaskList
+                tasks={tasks.todo}
+                title="To Do"
+                moveTask={moveTask}
+              />
+            </div>
+            <div className="doing-container taks-containers">
+              <DroppableTaskList
+                tasks={tasks.doing}
+                title="Doing"
+                moveTask={moveTask}
+              />
+            </div>
 
-          <div className="done-container taks-containers">
-            <DroppableTaskList
-              tasks={tasks.done}
-              title="Done"
-              moveTask={moveTask}
-            />
-          </div>
-        </Container>
-        <InputModal
-          addTask={(newTask, newFile) => addTask(newTask, newFile)}
-          handleClose={handleClose}
-          handleShow={handleShow}
-          show={show}
-          setShow={setShow}
-        />
+            <div className="done-container taks-containers">
+              <DroppableTaskList
+                tasks={tasks.done}
+                title="Done"
+                moveTask={moveTask}
+              />
+            </div>
+          </Container>
+
+          <InputModal
+            addTask={(newTask, newFile) => addTask(newTask, newFile)}
+            handleClose={handleClose}
+            handleShow={handleShow}
+            show={show}
+            setShow={setShow}
+          />
+        </div>
+        <DroppableBin deleteTask={deleteTask} />
       </div>
     </DndProvider>
   );
