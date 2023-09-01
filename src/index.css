@@ -20,24 +20,15 @@ div h3 {
 .App {
   height: 100vh;
 }
-/* .big-container-task {
-  width: 90vw;
-} */
+
 .taks-containers {
   padding: 10px;
   border-radius: 10px;
   width: 300px;
   flex-wrap: wrap;
+  min-height: 400px;
+  flex-grow: 1;
 }
-/* .to-do-container {
-  background-color: #b254a7;
-}
-.doing-container {
-  background-color: #bd78fe;
-}
-.done-container {
-  background-color: #fe789a;
-} */
 
 .task-item {
   background-color: #8454b2;

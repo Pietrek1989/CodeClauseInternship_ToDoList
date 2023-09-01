@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import useFetch from "./useFetch";
 
 const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
   const [toDoForm, setToDoForm] = useState({
     text: "",
   });
-  const [file, setFile] = useState();
   const [GIF, setGIF] = useState("");
 
   const gifUrl = useFetch({ GIF });
@@ -14,7 +13,6 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
   const handlePost = () => {
     addTask(toDoForm.text, gifUrl); // pass the file as well
     setToDoForm({ text: "" });
-    setFile(null); // reset file
     handleClose();
   };
 
@@ -62,17 +60,6 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
           POST
         </Button>
       </Modal.Footer>
-      {file && (
-        <Alert variant="success" className="mb-3">
-          You selected:{" "}
-          <strong>
-            <em>{file.name}</em>
-          </strong>{" "}
-          <span className="ml-5">
-            Press <strong>POST</strong> to proceed
-          </span>
-        </Alert>
-      )}
     </Modal>
   );
 };

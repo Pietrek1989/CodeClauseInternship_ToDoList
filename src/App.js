@@ -11,7 +11,7 @@ const ItemType = {
   TASK: "TASK",
 };
 
-const DraggableTask = ({ task, index, column, moveTask }) => {
+const DraggableTask = ({ task, index, column }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const ref = useDrag({
@@ -43,7 +43,7 @@ const DraggableTask = ({ task, index, column, moveTask }) => {
             alt="task-related-file"
             width="75"
             height="75"
-            className="m-3"
+            className="m-2"
           />
         </>
       )}
@@ -92,10 +92,28 @@ const DroppableBin = ({ deleteTask }) => {
     </div>
   );
 };
+
+const DroppableColumn = ({ tasks, title, moveTask }) => {
+  const [, ref] = useDrop({
+    accept: ItemType.TASK,
+    drop: (item) => {
+      moveTask(item.index, item.column, title);
+    },
+  });
+
+  return (
+    <div ref={ref} className="taks-containers">
+      {" "}
+      <DroppableTaskList tasks={tasks} title={title} moveTask={moveTask} />
+    </div>
+  );
+};
+
 const App = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [deletingTask, setDeletingTask] = useState(null);
 
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -142,6 +160,7 @@ const App = () => {
     const fromKey = mapTitleToStateKey(fromColumn);
     newTasks[fromKey].splice(fromIndex, 1);
     setTasks(newTasks);
+    setDeletingTask({ fromIndex, fromColumn });
   };
 
   return (
@@ -155,14 +174,14 @@ const App = () => {
           </Container>
           <Container className="d-flex justify-content-between text-center big-container-task w-100">
             <div className="to-do-container taks-containers">
-              <DroppableTaskList
+              <DroppableColumn
                 tasks={tasks.todo}
                 title="To Do"
                 moveTask={moveTask}
               />
             </div>
             <div className="doing-container taks-containers">
-              <DroppableTaskList
+              <DroppableColumn
                 tasks={tasks.doing}
                 title="Doing"
                 moveTask={moveTask}
@@ -170,7 +189,7 @@ const App = () => {
             </div>
 
             <div className="done-container taks-containers">
-              <DroppableTaskList
+              <DroppableColumn
                 tasks={tasks.done}
                 title="Done"
                 moveTask={moveTask}
