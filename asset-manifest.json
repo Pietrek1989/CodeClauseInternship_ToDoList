@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/codeclauseinternship_todolist/static/css/main.e9fad985.css",
+    "main.js": "/codeclauseinternship_todolist/static/js/main.76f50860.js",
+    "static/js/787.257ec007.chunk.js": "/codeclauseinternship_todolist/static/js/787.257ec007.chunk.js",
+    "index.html": "/codeclauseinternship_todolist/index.html",
+    "main.e9fad985.css.map": "/codeclauseinternship_todolist/static/css/main.e9fad985.css.map",
+    "main.76f50860.js.map": "/codeclauseinternship_todolist/static/js/main.76f50860.js.map",
+    "787.257ec007.chunk.js.map": "/codeclauseinternship_todolist/static/js/787.257ec007.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e9fad985.css",
+    "static/js/main.76f50860.js"
+  ]
+}
