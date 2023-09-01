@@ -1,5 +1,6 @@
 {
   "name": "codeclauseinternship_todolist",
+  "homepage": "http://Pietrek1989.github.io/CodeClauseInternship_ToDoList",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,7 +21,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +45,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "gh-pages": "^6.0.0"
   }
 }
