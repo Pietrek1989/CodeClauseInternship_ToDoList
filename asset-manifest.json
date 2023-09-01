@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/codeclauseinternship_todolist/static/css/main.e9fad985.css",
-    "main.js": "/codeclauseinternship_todolist/static/js/main.76f50860.js",
-    "static/js/787.257ec007.chunk.js": "/codeclauseinternship_todolist/static/js/787.257ec007.chunk.js",
-    "index.html": "/codeclauseinternship_todolist/index.html",
-    "main.e9fad985.css.map": "/codeclauseinternship_todolist/static/css/main.e9fad985.css.map",
-    "main.76f50860.js.map": "/codeclauseinternship_todolist/static/js/main.76f50860.js.map",
-    "787.257ec007.chunk.js.map": "/codeclauseinternship_todolist/static/js/787.257ec007.chunk.js.map"
+    "main.css": "/CodeClauseInternship_ToDoList/static/css/main.e9fad985.css",
+    "main.js": "/CodeClauseInternship_ToDoList/static/js/main.ba05c51e.js",
+    "static/js/787.257ec007.chunk.js": "/CodeClauseInternship_ToDoList/static/js/787.257ec007.chunk.js",
+    "index.html": "/CodeClauseInternship_ToDoList/index.html",
+    "main.e9fad985.css.map": "/CodeClauseInternship_ToDoList/static/css/main.e9fad985.css.map",
+    "main.ba05c51e.js.map": "/CodeClauseInternship_ToDoList/static/js/main.ba05c51e.js.map",
+    "787.257ec007.chunk.js.map": "/CodeClauseInternship_ToDoList/static/js/787.257ec007.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e9fad985.css",
-    "static/js/main.76f50860.js"
+    "static/js/main.ba05c51e.js"
   ]
 }
