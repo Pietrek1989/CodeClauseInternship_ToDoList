@@ -3,9 +3,9 @@
   "name": "To Do List",
   "icons": [
     {
-      "src": "./to-do-list-website-favicon-color.png",
+      "src": "/to-do-list-website-favicon-color.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "128x128"
+      "type": "image/png"
     }
   ],
   "start_url": ".",
