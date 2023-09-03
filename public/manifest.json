@@ -5,17 +5,7 @@
     {
       "src": "./to-do-list-website-favicon-color.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "./to-do-list-website-favicon-color.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "./to-do-list-website-favicon-color.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "type": "128x128"
     }
   ],
   "start_url": ".",
