@@ -1,0 +1,15 @@
+{
+  "short_name": "To Do List",
+  "name": "To Do List",
+  "icons": [
+    {
+      "src": "%PUBLIC_URL%/favicon.ico",
+      "sizes": "128x128 32x32 24x24 16x16",
+      "type": "image/ico"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
