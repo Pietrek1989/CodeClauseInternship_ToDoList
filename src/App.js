@@ -58,13 +58,12 @@ const DroppableTaskList = React.forwardRef(
       drop: (item, monitor) => {
         const clientOffset = monitor.getClientOffset();
         const listClientRect = listRef.current.getBoundingClientRect();
-        const taskHeight = 48; // Replace this with your task's actual height
+        const taskHeight = 48;
 
         let dropTargetIndex = Math.floor(
           (clientOffset.y - listClientRect.top) / taskHeight
         );
 
-        // Make sure the index is within bounds
         if (dropTargetIndex < 0) dropTargetIndex = 0;
         if (dropTargetIndex > tasks.length) dropTargetIndex = tasks.length;
 
