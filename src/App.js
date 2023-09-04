@@ -1,6 +1,6 @@
 import "./index.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import InputModal from "./components/InputModal";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -43,7 +43,7 @@ const DraggableTask = ({ task, index, column }) => {
             alt="task-related-file"
             width="75"
             height="75"
-            className="m-2"
+            className="m-2 task-image"
           />
         </>
       )}
@@ -51,32 +51,45 @@ const DraggableTask = ({ task, index, column }) => {
   );
 };
 
-const DroppableTaskList = ({ tasks, title, moveTask }) => {
-  const [, ref] = useDrop({
-    accept: ItemType.TASK,
-    drop: (item) => {
-      moveTask(item.index, item.column, title);
-    },
-  });
+const DroppableTaskList = React.forwardRef(
+  ({ tasks, title, moveTask }, listRef) => {
+    const [, ref] = useDrop({
+      accept: ItemType.TASK,
+      drop: (item, monitor) => {
+        const clientOffset = monitor.getClientOffset();
+        const listClientRect = listRef.current.getBoundingClientRect();
+        const taskHeight = 48; // Replace this with your task's actual height
 
-  return (
-    <div className="task-list-wrapper" ref={ref}>
-      {" "}
-      <h3>{title}</h3>
-      <div className="task-list">
-        {tasks.map((task, i) => (
-          <DraggableTask
-            key={i}
-            index={i}
-            task={task}
-            column={title}
-            moveTask={moveTask}
-          />
-        ))}
+        let dropTargetIndex = Math.floor(
+          (clientOffset.y - listClientRect.top) / taskHeight
+        );
+
+        // Make sure the index is within bounds
+        if (dropTargetIndex < 0) dropTargetIndex = 0;
+        if (dropTargetIndex > tasks.length) dropTargetIndex = tasks.length;
+
+        moveTask(item.index, item.column, title, dropTargetIndex);
+      },
+    });
+
+    return (
+      <div className="task-list-wrapper">
+        <h3>{title}</h3>
+        <div className="task-list" ref={listRef}>
+          {tasks.map((task, i) => (
+            <DraggableTask
+              key={i}
+              index={i}
+              task={task}
+              column={title}
+              moveTask={moveTask}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 const DroppableBin = ({ deleteTask }) => {
   const [, ref] = useDrop({
@@ -114,6 +127,10 @@ const App = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [deletingTask, setDeletingTask] = useState(null);
+
+  const todoListRef = useRef(null);
+  const doingListRef = useRef(null);
+  const doneListRef = useRef(null);
 
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -184,6 +201,7 @@ const App = () => {
                 tasks={tasks.todo}
                 title="To Do"
                 moveTask={moveTask}
+                ref={todoListRef}
               />
             </div>
             <div className="doing-container taks-containers">
@@ -191,6 +209,7 @@ const App = () => {
                 tasks={tasks.doing}
                 title="Doing"
                 moveTask={moveTask}
+                ref={doingListRef}
               />
             </div>
 
@@ -199,6 +218,7 @@ const App = () => {
                 tasks={tasks.done}
                 title="Done"
                 moveTask={moveTask}
+                ref={doneListRef}
               />
             </div>
           </Container>

@@ -5,6 +5,8 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  box-sizing: content-box;
 }
 
 code {
@@ -24,7 +26,7 @@ div h3 {
 .taks-containers {
   padding: 10px;
   border-radius: 10px;
-  width: 300px;
+  max-width: 300px;
   flex-wrap: wrap;
   min-height: 400px;
   flex-grow: 1;
@@ -67,4 +69,16 @@ div h3 {
 .post-button:hover {
   background-color: #e269b8 !important;
   scale: 1.05;
+}
+
+@media only screen and (max-width: 770px) {
+  .taks-containers {
+    max-width: 125px;
+    font-size: 0.8rem;
+    padding: 3px;
+  }
+  .task-image {
+    width: 50px;
+    height: 50px;
+  }
 }
