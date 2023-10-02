@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a full-stack To-Do List application built using React, and integrated with a drag-and-drop feature to allow easy task management. Users can add tasks, and use GIPHY api to optionally add a gif to the them. User can then move them across different columns, and delete them by dragging them to a bin. The application has a responsive design and persists tasks using Local Storage.
+This is a To-Do List application built using React, and integrated with a drag-and-drop feature to allow easy task management. Users can add tasks, and use GIPHY api to optionally add a gif to the them. User can then move them across different columns, and delete them by dragging them to a bin. The application has a responsive design and persists tasks using Local Storage.
 
 ## Table of Contents
 
