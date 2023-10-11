@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import useFetch from "./useFetch";
+import { useFetch } from "./useFetch.js";
 
 const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
   const [toDoForm, setToDoForm] = useState({

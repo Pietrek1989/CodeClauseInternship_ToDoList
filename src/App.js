@@ -6,6 +6,7 @@ import InputModal from "./components/InputModal";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { HiPlus, HiTrash } from "react-icons/hi";
+import NavBar from "./components/Nav";
 
 const ItemType = {
   TASK: "TASK",
@@ -183,12 +184,8 @@ const App = () => {
     <DndProvider backend={HTML5Backend}>
       <div className="d-flex flex-column justify-content-between h-screen App">
         <div className=" d-flex flex-column">
-          <img
-            src="/to-do-list-high-resolution-logo-color-on-transparent-background.png"
-            alt="logo to do list"
-            className="mx-auto mt-1"
-            style={{ width: "200px" }}
-          />
+          <NavBar />
+
           <Container className="text-center w-100 d-flex justify-content-between align-items-center">
             <Button onClick={handleShow} className="w-100 add-task-button mt-1">
               ADD NEW <HiPlus />
