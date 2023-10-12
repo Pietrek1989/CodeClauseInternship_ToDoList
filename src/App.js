@@ -1,12 +1,13 @@
 import "./index.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import InputModal from "./components/InputModal";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { HiPlus, HiTrash } from "react-icons/hi";
 import NavBar from "./components/Nav";
+import { Toaster, toast } from "sonner";
 
 const ItemType = {
   TASK: "TASK",
@@ -36,11 +37,11 @@ const DraggableTask = ({ task, index, column }) => {
         cursor: ref[0].isDragging ? "grabbing" : "pointer",
       }}
     >
-      {task.text}
-      {task.file && (
+      {task.title}
+      {task.img && (
         <>
           <img
-            src={task.file}
+            src={task.img}
             alt="task-related-file"
             width="75"
             height="75"
@@ -76,15 +77,16 @@ const DroppableTaskList = React.forwardRef(
       <div className="task-list-wrapper">
         <h3>{title}</h3>
         <div className="task-list" ref={listRef}>
-          {tasks.map((task, i) => (
-            <DraggableTask
-              key={i}
-              index={i}
-              task={task}
-              column={title}
-              moveTask={moveTask}
-            />
-          ))}
+          {tasks &&
+            tasks.map((task, i) => (
+              <DraggableTask
+                key={i}
+                index={i}
+                task={task}
+                column={title}
+                moveTask={moveTask}
+              />
+            ))}
         </div>
       </div>
     );
@@ -126,31 +128,43 @@ const App = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [deletingTask, setDeletingTask] = useState(null);
+  const [tasks, setTasks] = useState({ todo: [], doing: [], done: [] });
 
-  const todoListRef = useRef(null);
-  const doingListRef = useRef(null);
-  const doneListRef = useRef(null);
+  const updateTasks = async (updatedTasks) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BE_URL}/users/me/tasks`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({ tasks: updatedTasks }),
+        }
+      );
 
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-      return JSON.parse(savedTasks);
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.tasks); // Update local state with the returned tasks
+      } else {
+        console.error("Failed to update tasks:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error updating tasks:", error);
     }
-    return { todo: [], doing: [], done: [] };
-  });
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = (newTask, file) => {
-    const taskObject = { text: newTask, file };
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      todo: [...prevTasks.todo, taskObject],
-    }));
   };
+  // Your addTask function remains the same
+  const addTask = async (newTask, file) => {
+    const taskObject = { title: newTask, img: file };
+    const updatedTasks = {
+      ...tasks,
+      todo: [...tasks.todo, taskObject],
+    };
+
+    await updateTasks(updatedTasks);
+  };
+
   const mapTitleToStateKey = (title) => {
     const mapping = {
       "To Do": "todo",
@@ -159,29 +173,89 @@ const App = () => {
     };
     return mapping[title];
   };
-
-  const moveTask = (fromIndex, fromColumn, toColumn) => {
+  const moveTask = async (fromIndex, fromColumn, toColumn, dropTargetIndex) => {
     const newTasks = { ...tasks };
-
     const fromKey = mapTitleToStateKey(fromColumn);
     const toKey = mapTitleToStateKey(toColumn);
-
     const [movedTask] = newTasks[fromKey].splice(fromIndex, 1);
-    newTasks[toKey].push(movedTask);
+    newTasks[toKey].splice(dropTargetIndex, 0, movedTask); // Updated to insert the task at the correct index
 
-    setTasks(newTasks);
+    const response = await fetch(
+      `${process.env.REACT_APP_BE_URL}/users/me/tasks`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ tasks: newTasks }),
+      }
+    );
+
+    if (response.ok) {
+      setTasks(newTasks);
+    } else {
+      // Handle error
+      console.error("Failed to update tasks");
+    }
   };
 
-  const deleteTask = (fromIndex, fromColumn) => {
+  const deleteTask = async (fromIndex, fromColumn) => {
     const newTasks = { ...tasks };
     const fromKey = mapTitleToStateKey(fromColumn);
     newTasks[fromKey].splice(fromIndex, 1);
-    setTasks(newTasks);
-    setDeletingTask({ fromIndex, fromColumn });
+
+    const response = await fetch(
+      `${process.env.REACT_APP_BE_URL}/users/me/tasks`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ tasks: newTasks }),
+      }
+    );
+
+    if (response.ok) {
+      setTasks(newTasks);
+      toast.error("Task has been deleted");
+    } else {
+      console.error("Failed to update tasks");
+    }
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BE_URL}/users/me/info`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data); // Add this line to log the data
+          setTasks(data.tasks);
+        } else {
+          console.error("Failed to fetch tasks:", await response.text());
+        }
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <Toaster richColors position="bottom-center" closeButton />
+
       <div className="d-flex flex-column justify-content-between h-screen App">
         <div className=" d-flex flex-column">
           <NavBar />
@@ -197,7 +271,6 @@ const App = () => {
                 tasks={tasks.todo}
                 title="To Do"
                 moveTask={moveTask}
-                ref={todoListRef}
               />
             </div>
             <div className="doing-container taks-containers">
@@ -205,7 +278,6 @@ const App = () => {
                 tasks={tasks.doing}
                 title="Doing"
                 moveTask={moveTask}
-                ref={doingListRef}
               />
             </div>
 
@@ -214,7 +286,6 @@ const App = () => {
                 tasks={tasks.done}
                 title="Done"
                 moveTask={moveTask}
-                ref={doneListRef}
               />
             </div>
           </Container>

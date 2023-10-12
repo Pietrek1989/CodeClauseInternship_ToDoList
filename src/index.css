@@ -68,7 +68,6 @@ div h3 {
 }
 .post-button:hover {
   background-color: #e269b8 !important;
-  scale: 1.05;
 }
 
 @media only screen and (max-width: 770px) {
@@ -81,4 +80,41 @@ div h3 {
     width: 50px;
     height: 50px;
   }
+}
+.submit-button {
+  background-color: #fe78d0;
+  color: white;
+  border: none;
+  padding: 10px;
+  text-align: center;
+}
+.submit-button:hover {
+  background-color: #ca62a5;
+}
+
+label {
+  color: #b254a7 !important;
+}
+
+.modal-open-button {
+  background-color: transparent;
+  color: #b254a7;
+  border: solid #b254a7;
+  border-radius: 10%;
+  padding: 10px;
+  font-weight: bolder;
+}
+
+.avatar {
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  border: solid 3px white;
+}
+
+.name {
+  color: #5d2957;
+}
+button:hover {
+  scale: 1.05;
 }

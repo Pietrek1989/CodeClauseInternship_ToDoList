@@ -28,7 +28,7 @@ export const useFetch = ({ GIF }) => {
   return gifUrl;
 };
 
-export const getUserData = () => async () => {
+export const getUserData = async () => {
   try {
     const res = await fetch(`${process.env.REACT_APP_BE_URL}/users/me/info`, {
       headers: {
@@ -101,6 +101,7 @@ export const handleLogOutDatabase = async () => {
   try {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
+    console.log("Access Token:", accessToken);
 
     if (accessToken && refreshToken) {
       const response = await fetch(
@@ -120,6 +121,8 @@ export const handleLogOutDatabase = async () => {
       } else {
         throw new Error("Logout failed");
       }
+    } else {
+      console.error("Invalid or missing tokens");
     }
   } catch (error) {
     console.error(error);
@@ -128,6 +131,7 @@ export const handleLogOutDatabase = async () => {
 
 export const logIn = async (formValues, e) => {
   e.preventDefault();
+  const result = { data: null, error: null };
   try {
     const res = await fetch(`${process.env.REACT_APP_BE_URL}/users/session`, {
       method: "POST",
@@ -137,18 +141,14 @@ export const logIn = async (formValues, e) => {
       body: JSON.stringify(formValues),
     });
     if (res.ok) {
-      const data = await res.json();
-      console.log(data);
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-
-      window(
-        `/?accessToken=${data.accessToken}&refreshToken=${data.refreshToken}`
-      );
+      result.data = await res.json();
     } else {
-      console.error("Error logging in:");
+      const errorData = await res.json();
+      result.error = errorData.message || "An error occurred";
     }
   } catch (error) {
     console.error(error);
+    result.error = "An error occurred";
   }
+  return result;
 };

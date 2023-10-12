@@ -1,17 +1,17 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 "use client";
 import React, { useState } from "react";
 import "../google.css";
 import { logIn } from "./useFetch";
+import { toast } from "sonner";
+import { Spinner } from "react-bootstrap";
 
-const LoginPage = () => {
-  const [formMode, setFormMode] = useState("login"); // New state to manage form mode
-
+const LoginPage = ({ formMode, setFormMode }) => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
     username: formMode === "register" ? "" : undefined,
   });
-  const [isIncorrect, setIsIncorrect] = useState(false);
   const [isLoading, setisLoading] = useState(false);
 
   const apiUrl = process.env.REACT_APP_BE_URL;
@@ -20,36 +20,44 @@ const LoginPage = () => {
     setFormMode((prevMode) => (prevMode === "login" ? "register" : "login"));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("trying to submit");
+
     setisLoading(true);
-    logIn(formValues, e);
+    const result = await logIn(formValues, e);
+    setisLoading(false);
+
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      console.log(result.data);
+      localStorage.setItem("accessToken", result.data.accessToken);
+      localStorage.setItem("refreshToken", result.data.refreshToken);
+      window.location.replace(
+        `/?accessToken=${result.data.accessToken}&refreshToken=${result.data.refreshToken}`
+      );
+    }
   };
   return (
-    <section className="flex flex-col md:flex-row  items-center">
+    <section className="flex flex-col md:flex-row  items-center p-5">
       <div className=" w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100 form">
-          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
-            {formMode === "login"
-              ? "Log in to your account"
-              : "Create an account"}
-          </h1>
-
           <form
-            className="mt-6"
+            className="mt-6 "
             action="#"
             method="POST"
             onSubmit={handleSubmit}
           >
             {formMode === "register" && (
-              <div>
-                <label className="block text-gray-700">Username</label>
+              <div className="d-flex justify-content-between align-items-center">
+                <label className="block fs-5">Username:</label>
                 <input
                   type="text"
                   name="username"
                   id="username"
                   placeholder="Enter Username"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                  className="w-full p-2 rounded-lg mt-2 border rounded-2 focus:border-blue-500 flex focus-ring"
                   required
                   value={formValues.username}
                   onChange={(e) =>
@@ -58,14 +66,14 @@ const LoginPage = () => {
                 />
               </div>
             )}
-            <div className="mt-4">
-              <label className="block text-gray-700">Email Address</label>
+            <div className="d-flex justify-content-between align-items-center mt-2">
+              <label className="block fs-5">Email:</label>
               <input
                 type="email"
                 name="email"
                 id="email"
                 placeholder="Enter Email Address"
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full p-2 rounded-lg mt-2 border rounded-2 focus:border-blue-500 flex focus-ring"
                 required
                 value={formValues.email}
                 onChange={(e) =>
@@ -73,15 +81,15 @@ const LoginPage = () => {
                 }
               />
             </div>
-            <div className="mt-4">
-              <label className="block text-gray-700">Password</label>
+            <div className="d-flex justify-content-between align-items-center mt-2">
+              <label className="block  fs-5">Password:</label>
               <input
                 type="password"
                 name="password"
                 id="password"
                 placeholder="Enter Password"
                 minLength={5}
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full p-2 rounded-lg mt-2 border rounded-2 focus:border-blue-500 flex focus-ring"
                 required
                 value={formValues.password}
                 onChange={(e) =>
@@ -89,27 +97,35 @@ const LoginPage = () => {
                 }
               />
             </div>
-
-            <button
-              type="submit"
-              className="block font-semibold rounded-lg  bg-primary  text-black  w-24 "
-            >
-              {formMode === "login" ? "Log In" : "Register"}
-            </button>
+            <div className="text-center mt-4">
+              <button
+                type="submit"
+                className="  rounded   w-24  submit-button "
+              >
+                {" "}
+                {isLoading && (
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                )}
+                {formMode === "login" ? "Log In" : "Register"}
+              </button>
+            </div>
           </form>
-          {isLoading && (
-            <p>
-              <div role="status" className="mt-10">
-                <span className="sr-only">Loading...</span>
-                {/* <Loader /> */}
-              </div>
-            </p>
-          )}
-          {isIncorrect && (
-            <p className="text-danger">Wrong password, try again!</p>
-          )}
-
-          <hr className="my-6 border-gray-300 w-full" />
+          {/* {isLoading && (
+        <Spinner
+        as="span"
+        animation="grow"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
+          )} */}
+          <p className="text-center mt-2 fs-5 text-secondary">OR</p>{" "}
           <a href={`${apiUrl}/users/googlelogin`}>
             <button className="button-google mx-auto">
               <svg
@@ -142,21 +158,28 @@ const LoginPage = () => {
               <span className="text">Continue with Google</span>
             </button>
           </a>
-
-          <p className="mt-8">
+          <p className="mt-3">
             {formMode === "login" ? (
               <>
                 Need an account?{" "}
-                <span href="#" onClick={toggleFormMode}>
+                <a
+                  className="icon-link icon-link-hover"
+                  href="#"
+                  onClick={toggleFormMode}
+                >
                   Create an account
-                </span>
+                </a>
               </>
             ) : (
               <>
                 Already have an account?{" "}
-                <span href="#" onClick={toggleFormMode}>
+                <a
+                  className="icon-link icon-link-hover"
+                  href="#"
+                  onClick={toggleFormMode}
+                >
                   Log in
-                </span>
+                </a>
               </>
             )}
           </p>

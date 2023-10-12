@@ -10,9 +10,11 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
 
   const gifUrl = useFetch({ GIF });
 
-  const handlePost = () => {
+  const handlePost = (e) => {
+    e.preventDefault();
     addTask(toDoForm.text, gifUrl); // pass the file as well
     setToDoForm({ text: "" });
+    setGIF("");
     handleClose();
   };
 
@@ -24,7 +26,7 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
       <Modal.Body>
         <div className="d-flex flex-column mx-2 my-2">
           <div className="form-outline">
-            <Form>
+            <Form onSubmit={handlePost}>
               <Form.Group className="form-outline">
                 <p className="text-color">Name:</p>
                 <Form.Control
