@@ -154,7 +154,7 @@ const App = () => {
       console.error("Error updating tasks:", error);
     }
   };
-  // Your addTask function remains the same
+
   const addTask = async (newTask, file) => {
     const taskObject = { title: newTask, img: file };
     const updatedTasks = {
@@ -163,6 +163,7 @@ const App = () => {
     };
 
     await updateTasks(updatedTasks);
+    toast.success("New task created");
   };
 
   const mapTitleToStateKey = (title) => {

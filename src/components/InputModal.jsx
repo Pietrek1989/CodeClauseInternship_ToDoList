@@ -48,7 +48,7 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter a gIF for GIF"
+                  placeholder="Enter a keyword for GIF"
                   value={GIF}
                   onChange={(e) => setGIF(e.target.value)}
                 />

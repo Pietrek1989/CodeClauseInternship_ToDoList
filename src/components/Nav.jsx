@@ -22,6 +22,7 @@ const NavBar = () => {
     handleLogOutDatabase();
     setIsLogged(false);
     setUserData(null);
+    handleCloseUserSettings();
   };
   const fetchUserData = async () => {
     const data = await getUserData();
@@ -90,6 +91,7 @@ const NavBar = () => {
             handleClose={handleCloseLogin}
             formMode={formMode}
             setFormMode={setFormMode}
+            fetchUserData={fetchUserData}
           />
         </Modal>
         <UserSettingsModal

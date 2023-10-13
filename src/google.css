@@ -1,215 +1,214 @@
 .button-google {
-    padding: 10px;
-    font-weight: bold;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    border-radius: 35px;
-    align-items: center;
-    border: solid gray 1px;
-    outline: none;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border-radius: 35px;
+  align-items: center;
+  border: solid gray 1px;
+  outline: none;
+}
+
+.button-google .svg {
+  height: 25px;
+  margin-right: 10px;
+}
+
+.button-google .text {
+  z-index: 10;
+  font-size: 14px;
+}
+
+.button-google:hover .text {
+  animation: text forwards 0.3s;
+  color: white;
+}
+
+@keyframes text {
+  from {
+    color: black;
   }
-  
-  .button-google .svg {
-    height: 25px;
-    margin-right: 10px;
+
+  to {
+    color: white;
   }
-  
-  .button-google .text {
-    z-index: 10;
-    font-size: 14px;
-  }
-  
-  .button-google:hover .text {
-    animation: text forwards 0.3s;
-    /*color: white;*/
-  }
-  
-  @keyframes text {
-    from {
-      color: black;
-    }
-  
-    to {
-      color: white;
-    }
-  }
-  
-  .button-google .svg {
-    z-index: 6;
-  }
-  
-  .button-google:hover::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 9%;
-    transform: translate(-50%, -50%);
+}
+
+.button-google .svg {
+  z-index: 6;
+}
+
+.button-google:hover::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 9%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  opacity: 0;
+  border-radius: 300px;
+  animation: wave1 2.5s ease-in-out forwards;
+}
+
+.button-google:hover::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 9%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  opacity: 0;
+  border-radius: 300px;
+  animation: wave2 2.5s ease-in-out forwards;
+}
+
+@keyframes wave1 {
+  0% {
+    z-index: 1;
+    background: #eb4335;
     width: 0;
     height: 0;
-    opacity: 0;
-    border-radius: 300px;
-    animation: wave1 2.5s ease-in-out forwards;
+    opacity: 1;
   }
-  
-  .button-google:hover::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 9%;
-    transform: translate(-50%, -50%);
+
+  1% {
+    z-index: 1;
+    background: #eb4335;
     width: 0;
     height: 0;
-    opacity: 0;
-    border-radius: 300px;
-    animation: wave2 2.5s ease-in-out forwards;
+    opacity: 1;
   }
-  
-  @keyframes wave1 {
-    0% {
-      z-index: 1;
-      background: #eb4335;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    1% {
-      z-index: 1;
-      background: #eb4335;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    25% {
-      z-index: 1;
-      background: #eb4335;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    26% {
-      z-index: 3;
-      background: #34a853;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    50% {
-      z-index: 3;
-      background: #34a853;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    70% {
-      z-index: 3;
-      background: #34a853;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    100% {
-      z-index: 3;
-      background: #34a853;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
+
+  25% {
+    z-index: 1;
+    background: #eb4335;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
   }
-  
-  @keyframes wave2 {
-    0% {
-      z-index: 2;
-      background: #fbbc05;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    11% {
-      z-index: 2;
-      background: #fbbc05;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    35% {
-      z-index: 2;
-      background: #fbbc05;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    39% {
-      z-index: 2;
-      background: #fbbc05;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    40% {
-      z-index: 4;
-      background: #4285f4;
-      width: 0;
-      height: 0;
-      opacity: 1;
-    }
-  
-    64% {
-      z-index: 4;
-      background: #4285f4;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
-  
-    100% {
-      z-index: 4;
-      background: #4285f4;
-      width: 800px;
-      height: 800px;
-      opacity: 1;
-    }
+
+  26% {
+    z-index: 3;
+    background: #34a853;
+    width: 0;
+    height: 0;
+    opacity: 1;
   }
-  
-  .button-google:hover .red {
-    animation: disappear 0.1s forwards;
-    animation-delay: 0.1s;
+
+  50% {
+    z-index: 3;
+    background: #34a853;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
   }
-  
-  .button-google:hover .yellow {
-    animation: disappear 0.1s forwards;
-    animation-delay: 0.3s;
+
+  70% {
+    z-index: 3;
+    background: #34a853;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
   }
-  
-  .button-google:hover .green {
-    animation: disappear 0.1s forwards;
-    animation-delay: 0.7s;
+
+  100% {
+    z-index: 3;
+    background: #34a853;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
   }
-  
-  .button-google:hover .blue {
-    animation: disappear 0.1s forwards;
-    animation-delay: 1.1s;
+}
+
+@keyframes wave2 {
+  0% {
+    z-index: 2;
+    background: #fbbc05;
+    width: 0;
+    height: 0;
+    opacity: 1;
   }
-  
-  @keyframes disappear {
-    from {
-      filter: brightness(1);
-    }
-  
-    to {
-      filter: brightness(100);
-    }
+
+  11% {
+    z-index: 2;
+    background: #fbbc05;
+    width: 0;
+    height: 0;
+    opacity: 1;
   }
-  
+
+  35% {
+    z-index: 2;
+    background: #fbbc05;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
+  }
+
+  39% {
+    z-index: 2;
+    background: #fbbc05;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
+  }
+
+  40% {
+    z-index: 4;
+    background: #4285f4;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  64% {
+    z-index: 4;
+    background: #4285f4;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
+  }
+
+  100% {
+    z-index: 4;
+    background: #4285f4;
+    width: 800px;
+    height: 800px;
+    opacity: 1;
+  }
+}
+
+.button-google:hover .red {
+  animation: disappear 0.1s forwards;
+  animation-delay: 0.1s;
+}
+
+.button-google:hover .yellow {
+  animation: disappear 0.1s forwards;
+  animation-delay: 0.3s;
+}
+
+.button-google:hover .green {
+  animation: disappear 0.1s forwards;
+  animation-delay: 0.7s;
+}
+
+.button-google:hover .blue {
+  animation: disappear 0.1s forwards;
+  animation-delay: 1.1s;
+}
+
+@keyframes disappear {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(100);
+  }
+}

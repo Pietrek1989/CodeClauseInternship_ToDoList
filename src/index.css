@@ -19,6 +19,10 @@ div h3 {
   color: white;
   background-color: #fe789a;
 }
+
+.a-google {
+  text-decoration-line: none !important;
+}
 .App {
   height: 100vh;
 }

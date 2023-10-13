@@ -2,11 +2,11 @@
 "use client";
 import React, { useState } from "react";
 import "../google.css";
-import { logIn } from "./useFetch";
+import { logIn, register } from "./useFetch";
 import { toast } from "sonner";
 import { Spinner } from "react-bootstrap";
 
-const LoginPage = ({ formMode, setFormMode }) => {
+const LoginPage = ({ formMode, setFormMode, fetchUserData, handleClose }) => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -25,7 +25,14 @@ const LoginPage = ({ formMode, setFormMode }) => {
     console.log("trying to submit");
 
     setisLoading(true);
-    const result = await logIn(formValues, e);
+    let result;
+    if (formMode === "login") {
+      result = await logIn(formValues, e);
+      toast.success("Logged in succesfully!");
+    } else {
+      result = await register(formValues, e);
+      toast.success("Account created, please log in");
+    }
     setisLoading(false);
 
     if (result.error) {
@@ -34,9 +41,8 @@ const LoginPage = ({ formMode, setFormMode }) => {
       console.log(result.data);
       localStorage.setItem("accessToken", result.data.accessToken);
       localStorage.setItem("refreshToken", result.data.refreshToken);
-      window.location.replace(
-        `/?accessToken=${result.data.accessToken}&refreshToken=${result.data.refreshToken}`
-      );
+      fetchUserData();
+      handleClose();
     }
   };
   return (
@@ -126,7 +132,7 @@ const LoginPage = ({ formMode, setFormMode }) => {
       />
           )} */}
           <p className="text-center mt-2 fs-5 text-secondary">OR</p>{" "}
-          <a href={`${apiUrl}/users/googlelogin`}>
+          <a href={`${apiUrl}/users/googlelogin`} className="a-google">
             <button className="button-google mx-auto">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

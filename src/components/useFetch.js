@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 const APIKEY = process.env.REACT_APP_GIPHY_API;
 
 export const useFetch = ({ GIF }) => {
-  console.log(APIKEY);
   const [gifUrl, setGifUrl] = useState("");
 
   const fetchGifs = async () => {
     try {
       const response = await fetch(
-        `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&q=${GIF.split(
-          " "
-        ).join("")}&limit=1`
+        `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&q=${encodeURIComponent(
+          GIF
+        )}&limit=1`
       );
       const { data } = await response.json();
 
@@ -151,4 +150,30 @@ export const logIn = async (formValues, e) => {
     result.error = "An error occurred";
   }
   return result;
+};
+
+export const register = async (formValues) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_BE_URL}/users/account`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      return { error: errorData.message || "Failed to register" };
+    }
+
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return { error: error.message || "An error occurred while registering" };
+  }
 };
