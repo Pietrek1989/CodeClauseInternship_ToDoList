@@ -23,7 +23,7 @@ const UserSettingsModal = ({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Assuming tokens are stored in localStorage
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({
           username: newUsername || userData.username,
@@ -46,7 +46,7 @@ const UserSettingsModal = ({
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex justify-content-around align-items-center">
-          <h2 className="pl-5">Hello {userData?.username}</h2>
+          <h2 className="pl-5">{userData?.username}</h2>
 
           <img
             src={userData?.avatar}

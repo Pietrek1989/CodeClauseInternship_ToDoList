@@ -6,7 +6,13 @@ import { logIn, register } from "./useFetch";
 import { toast } from "sonner";
 import { Spinner } from "react-bootstrap";
 
-const LoginPage = ({ formMode, setFormMode, fetchUserData, handleClose }) => {
+const LoginPage = ({
+  formMode,
+  setFormMode,
+  fetchUserData,
+  handleClose,
+  fetchTasks,
+}) => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -42,6 +48,7 @@ const LoginPage = ({ formMode, setFormMode, fetchUserData, handleClose }) => {
       localStorage.setItem("accessToken", result.data.accessToken);
       localStorage.setItem("refreshToken", result.data.refreshToken);
       fetchUserData();
+      fetchTasks();
       handleClose();
     }
   };
@@ -122,15 +129,6 @@ const LoginPage = ({ formMode, setFormMode, fetchUserData, handleClose }) => {
               </button>
             </div>
           </form>
-          {/* {isLoading && (
-        <Spinner
-        as="span"
-        animation="grow"
-        size="sm"
-        role="status"
-        aria-hidden="true"
-      />
-          )} */}
           <p className="text-center mt-2 fs-5 text-secondary">OR</p>{" "}
           <a href={`${apiUrl}/users/googlelogin`} className="a-google">
             <button className="button-google mx-auto">

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useFetch } from "./useFetch.js";
 
-const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
+const InputModal = ({ addTask, handleClose, show }) => {
   const [toDoForm, setToDoForm] = useState({
     text: "",
   });
@@ -12,7 +12,7 @@ const InputModal = ({ addTask, handleClose, handleShow, show, setShow }) => {
 
   const handlePost = (e) => {
     e.preventDefault();
-    addTask(toDoForm.text, gifUrl); // pass the file as well
+    addTask(toDoForm.text, gifUrl);
     setToDoForm({ text: "" });
     setGIF("");
     handleClose();

@@ -177,3 +177,24 @@ export const register = async (formValues) => {
     return { error: error.message || "An error occurred while registering" };
   }
 };
+
+export const taskRequests = async (method, endpoint, body) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_BE_URL}${endpoint}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: body && JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error(`Failed to ${method} data:`, await response.text());
+    }
+  } catch (error) {
+    console.error(`Error during ${method} request:`, error);
+  }
+};

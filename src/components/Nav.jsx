@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap"; // Import Bootstrap components
+import { Modal } from "react-bootstrap";
 import { getUserData, handleLogOutDatabase } from "./useFetch";
-import LoginPage from "./Login"; // Import your LoginPage component
-import UserSettingsModal from "./UserSettingsModal"; // Import UserSettingsModal component
+import LoginPage from "./Login";
+import UserSettingsModal from "./UserSettingsModal";
 
-const NavBar = () => {
+const NavBar = ({ fetchTasks, setTasks }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [userData, setUserData] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
-  const [formMode, setFormMode] = useState("login"); // New state to manage form mode
+  const [formMode, setFormMode] = useState("login");
 
   const handleShowLogin = () => setShowLoginModal(true);
   const handleCloseLogin = () => setShowLoginModal(false);
@@ -22,6 +22,8 @@ const NavBar = () => {
     handleLogOutDatabase();
     setIsLogged(false);
     setUserData(null);
+    setTasks({ todo: [], doing: [], done: [] });
+
     handleCloseUserSettings();
   };
   const fetchUserData = async () => {
@@ -92,6 +94,7 @@ const NavBar = () => {
             formMode={formMode}
             setFormMode={setFormMode}
             fetchUserData={fetchUserData}
+            fetchTasks={fetchTasks}
           />
         </Modal>
         <UserSettingsModal
