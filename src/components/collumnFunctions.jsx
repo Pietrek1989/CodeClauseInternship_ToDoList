@@ -6,7 +6,13 @@ const ItemType = {
   TASK: "TASK",
 };
 
-export const DraggableTask = ({ task, index, column }) => {
+export const DraggableTask = ({
+  task,
+  index,
+  column,
+  moveTask,
+  onTaskClick,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const ref = useDrag({
@@ -18,10 +24,15 @@ export const DraggableTask = ({ task, index, column }) => {
       return { isDragging: isCurrentlyDragging };
     },
   });
-
+  const handleClick = () => {
+    if (!isDragging) {
+      onTaskClick();
+    }
+  };
   return (
     <div
       ref={ref[1]}
+      onClick={handleClick}
       className={`task-item rounded p-2 text-light text-center  ${
         isDragging ? "dragging" : ""
       }`}
@@ -47,7 +58,7 @@ export const DraggableTask = ({ task, index, column }) => {
 };
 
 export const DroppableTaskList = React.forwardRef(
-  ({ tasks, title, moveTask }, listRef) => {
+  ({ tasks, title, moveTask, onTaskClick }, listRef) => {
     const [, ref] = useDrop({
       accept: ItemType.TASK,
       drop: (item, monitor) => {
@@ -78,6 +89,7 @@ export const DroppableTaskList = React.forwardRef(
                 task={task}
                 column={title}
                 moveTask={moveTask}
+                onTaskClick={() => onTaskClick(task)}
               />
             ))}
         </div>
@@ -101,7 +113,7 @@ export const DroppableBin = ({ deleteTask }) => {
   );
 };
 
-export const DroppableColumn = ({ tasks, title, moveTask }) => {
+export const DroppableColumn = ({ tasks, title, moveTask, onTaskClick }) => {
   const [, ref] = useDrop({
     accept: ItemType.TASK,
     drop: (item) => {
@@ -112,7 +124,12 @@ export const DroppableColumn = ({ tasks, title, moveTask }) => {
   return (
     <div ref={ref} className="taks-containers">
       {" "}
-      <DroppableTaskList tasks={tasks} title={title} moveTask={moveTask} />
+      <DroppableTaskList
+        tasks={tasks}
+        title={title}
+        moveTask={moveTask}
+        onTaskClick={onTaskClick}
+      />
     </div>
   );
 };

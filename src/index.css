@@ -122,3 +122,27 @@ label {
 button:hover {
   scale: 1.05;
 }
+.move-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+  color: #5d2957;
+  font-style: italic;
+}
+
+.line {
+  flex-grow: 1;
+  height: 3px;
+  background-color: #fe78d0;
+  margin-right: 1em;
+}
+
+.full-screen {
+  height: 70vh;
+  width: 100vw;
+  font-weight: bolder;
+}
+
+.created-paragraph {
+  color: #fe789a;
+}

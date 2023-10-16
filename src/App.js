@@ -10,18 +10,52 @@ import NavBar from "./components/Nav";
 import { Toaster, toast } from "sonner";
 import { DroppableBin, DroppableColumn } from "./components/collumnFunctions";
 import { taskRequests } from "./components/useFetch";
+import TaskModal from "./components/TaskModal";
 
 const App = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [tasks, setTasks] = useState({ todo: [], doing: [], done: [] });
 
+  const [tasks, setTasks] = useState({ todo: [], doing: [], done: [] });
+  const [taskModal, setTaskModal] = useState({
+    show: false,
+    task: null,
+  });
+  const handleTaskClick = (task) => {
+    setTaskModal({
+      show: true,
+      task,
+    });
+  };
   const updateTasks = async (updatedTasks) => {
+    console.log("updateTasks - updatedTasks:", updatedTasks);
     const data = await taskRequests("PUT", "/users/me/tasks", {
       tasks: updatedTasks,
     });
-    if (data) setTasks(data.tasks);
+    console.log("updateTasks - data:", data);
+
+    if (data) {
+      // Merge the updatedTasks with the task IDs returned from the backend
+      const mergedTasks = {
+        todo: updatedTasks.todo.map((task, index) =>
+          task._id ? task : { ...task, _id: data.tasks.todo[index] }
+        ),
+        doing: updatedTasks.doing.map((task, index) =>
+          task._id ? task : { ...task, _id: data.tasks.doing[index] }
+        ),
+        done: updatedTasks.done.map((task, index) =>
+          task._id ? task : { ...task, _id: data.tasks.done[index] }
+        ),
+      };
+
+      console.log(
+        "Before merging tasks:",
+        JSON.stringify(mergedTasks, null, 2)
+      );
+      setTasks(mergedTasks);
+      console.log("After merging tasks:", JSON.stringify(mergedTasks, null, 2));
+    }
   };
 
   const addTask = async (newTask, file) => {
@@ -30,9 +64,10 @@ const App = () => {
       ...tasks,
       todo: [...tasks.todo, taskObject],
     };
-
+    console.log("addTask - updatedTasks:", updatedTasks); // Add this line
     await updateTasks(updatedTasks);
     toast.success("New task created");
+    console.log("new task", updatedTasks);
   };
 
   const mapTitleToStateKey = (title) => {
@@ -43,17 +78,36 @@ const App = () => {
     };
     return mapping[title];
   };
-  const moveTask = async (fromIndex, fromColumn, toColumn, dropTargetIndex) => {
-    const newTasks = { ...tasks };
-    const fromKey = mapTitleToStateKey(fromColumn);
-    const toKey = mapTitleToStateKey(toColumn);
-    const [movedTask] = newTasks[fromKey].splice(fromIndex, 1);
-    newTasks[toKey].splice(dropTargetIndex, 0, movedTask); // Updated to insert the task at the correct index
 
-    const data = await taskRequests("PUT", "/users/me/tasks", {
-      tasks: newTasks,
-    });
-    if (data) setTasks(data.tasks);
+  const moveTask = async (fromIndex, fromColumn, toColumn, dropTargetIndex) => {
+    try {
+      const newTasks = { ...tasks };
+      const fromKey = mapTitleToStateKey(fromColumn);
+      const toKey = mapTitleToStateKey(toColumn);
+      const [movedTask] = newTasks[fromKey].splice(fromIndex, 1); // Remove the task from its old position
+
+      newTasks[toKey].splice(dropTargetIndex, 0, movedTask); // Insert the task at its new position
+
+      if (fromColumn !== toColumn) {
+        // If moving across columns, update the movedAt property
+        const moveDetail = { column: toKey, time: new Date().toISOString() };
+        movedTask.movedAt = [...(movedTask.movedAt || []), moveDetail];
+      }
+
+      // Send the request to update all tasks
+      const data = await taskRequests("PUT", "/users/me/tasks", {
+        tasks: newTasks,
+      });
+
+      if (data && data.tasks) {
+        // Fetch the tasks again to ensure client-side state is in sync with server
+        await fetchTasks();
+      } else {
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Failed to move task:", error);
+    }
   };
 
   const deleteTask = async (fromIndex, fromColumn) => {
@@ -68,10 +122,14 @@ const App = () => {
       toast.error("Task has been deleted");
     }
   };
+
   const fetchTasks = async () => {
-    const data = await taskRequests("GET", "/users/me/info");
-    if (data) setTasks(data.tasks);
+    if (localStorage.getItem("accessToken")) {
+      const data = await taskRequests("GET", "/users/me/info");
+      if (data) setTasks(data.tasks);
+    }
   };
+
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -90,28 +148,39 @@ const App = () => {
             </Button>
           </Container>
           <Container className="d-flex justify-content-between text-center big-container-task w-100">
-            <div className="to-do-container taks-containers">
-              <DroppableColumn
-                tasks={tasks.todo}
-                title="To Do"
-                moveTask={moveTask}
-              />
-            </div>
-            <div className="doing-container taks-containers">
-              <DroppableColumn
-                tasks={tasks.doing}
-                title="Doing"
-                moveTask={moveTask}
-              />
-            </div>
+            {tasks ? (
+              <>
+                <div className="to-do-container taks-containers">
+                  <DroppableColumn
+                    tasks={tasks.todo}
+                    title="To Do"
+                    moveTask={moveTask}
+                    onTaskClick={handleTaskClick}
+                  />
+                </div>
+                <div className="doing-container taks-containers">
+                  <DroppableColumn
+                    tasks={tasks.doing}
+                    title="Doing"
+                    moveTask={moveTask}
+                    onTaskClick={handleTaskClick}
+                  />
+                </div>
 
-            <div className="done-container taks-containers">
-              <DroppableColumn
-                tasks={tasks.done}
-                title="Done"
-                moveTask={moveTask}
-              />
-            </div>
+                <div className="done-container taks-containers">
+                  <DroppableColumn
+                    tasks={tasks.done}
+                    title="Done"
+                    moveTask={moveTask}
+                    onTaskClick={handleTaskClick}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="d-flex justify-content-center align-items-center full-screen">
+                <div>PLEASE LOG IN...</div>
+              </div>
+            )}
           </Container>
 
           <InputModal
@@ -120,6 +189,11 @@ const App = () => {
             handleShow={handleShow}
             show={show}
             setShow={setShow}
+          />
+          <TaskModal
+            show={taskModal.show}
+            task={taskModal.task}
+            onHide={() => setTaskModal({ show: false, task: null })}
           />
         </div>
         <DroppableBin deleteTask={deleteTask} />

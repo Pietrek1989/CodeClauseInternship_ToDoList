@@ -17,6 +17,13 @@ const UserSettingsModal = ({
 
   const handlePost = async () => {
     console.log("new username", newUsername, "new avatar", gifUrl);
+    const body = {
+      username: newUsername || userData.username,
+    };
+    if (GIF) {
+      body.avatar = gifUrl;
+    }
+
     const response = await fetch(
       `${process.env.REACT_APP_BE_URL}/users/me/info`,
       {
@@ -25,20 +32,19 @@ const UserSettingsModal = ({
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        body: JSON.stringify({
-          username: newUsername || userData.username,
-          avatar: gifUrl,
-        }),
+        body: JSON.stringify(body),
       }
     );
 
     if (response.ok) {
       fetchUserData();
-      toast.success("User has been changed");
+      handleClose();
+      toast.success("User info has been changed");
     } else {
       console.error("Failed to update user info:", await response.text());
     }
   };
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

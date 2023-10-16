@@ -44,7 +44,6 @@ const LoginPage = ({
     if (result.error) {
       toast.error(result.error);
     } else {
-      console.log(result.data);
       localStorage.setItem("accessToken", result.data.accessToken);
       localStorage.setItem("refreshToken", result.data.refreshToken);
       fetchUserData();

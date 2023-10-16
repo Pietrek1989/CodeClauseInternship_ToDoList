@@ -43,7 +43,7 @@ export const getUserData = async () => {
       await refreshAccessToken();
       // try to get user data again
       const newAccessToken = localStorage.getItem("accessToken");
-      console.log("the updated access", newAccessToken);
+      // console.log("the updated access", newAccessToken);
       if (newAccessToken) {
         const response = await fetch(
           `${process.env.REACT_APP_BE_URL}/users/me`,
@@ -66,7 +66,7 @@ export const getUserData = async () => {
 
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
-  console.log("refresh in func", refreshToken);
+  // console.log("refresh in func", refreshToken);
   const response = await fetch(
     `${process.env.REACT_APP_BE_URL}/users/session/refresh`,
     {
@@ -79,11 +79,11 @@ export const refreshAccessToken = async () => {
       }),
     }
   );
-  console.log(response.status);
+  // console.log(response.status);
   if (response.ok) {
-    console.log("response", response);
+    // console.log("response", response);
     const { accessToken, refreshToken } = await response.json();
-    console.log("the new refresh token", refreshToken);
+    // console.log("the new refresh token", refreshToken);
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
   } else if (response.status === 401) {
@@ -100,7 +100,7 @@ export const handleLogOutDatabase = async () => {
   try {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log("Access Token:", accessToken);
+    // console.log("Access Token:", accessToken);
 
     if (accessToken && refreshToken) {
       const response = await fetch(
@@ -190,11 +190,20 @@ export const taskRequests = async (method, endpoint, body) => {
     });
 
     if (response.ok) {
-      return await response.json();
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        return await response.json();
+      } else {
+        console.warn("Unexpected content type:", contentType);
+        throw new Error(`Unexpected content type: ${contentType}`);
+      }
     } else {
-      console.error(`Failed to ${method} data:`, await response.text());
+      const errorText = await response.text();
+      console.error(`Failed to ${method} data:`, errorText);
+      throw new Error(`Server error: ${errorText}`);
     }
   } catch (error) {
     console.error(`Error during ${method} request:`, error);
+    return { error: error.message };
   }
 };

@@ -7,9 +7,9 @@ import UserSettingsModal from "./UserSettingsModal";
 const NavBar = ({ fetchTasks, setTasks }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
   const [formMode, setFormMode] = useState("login");
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleShowLogin = () => setShowLoginModal(true);
   const handleCloseLogin = () => setShowLoginModal(false);
