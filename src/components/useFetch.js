@@ -207,3 +207,44 @@ export const taskRequests = async (method, endpoint, body) => {
     return { error: error.message };
   }
 };
+
+export const forgotPassword = async (email, e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch("/email/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.message || "Error requesting password reset" };
+    }
+    return { data };
+  } catch (error) {
+    console.error("Error requesting password reset:", error);
+    return { error: error.message || "Error requesting password reset" };
+  }
+};
+
+export const resetPassword = async (newPassword, token) => {
+  try {
+    const response = await fetch(`/email/reset-password/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newPassword }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.message || "Error resetting password" };
+    }
+    return { data };
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return { error: error.message || "Error resetting password" };
+  }
+};

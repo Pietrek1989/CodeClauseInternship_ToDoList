@@ -11,6 +11,8 @@ import { Toaster, toast } from "sonner";
 import { DroppableBin, DroppableColumn } from "./components/collumnFunctions";
 import { taskRequests } from "./components/useFetch";
 import TaskModal from "./components/TaskModal";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
+import ResetPasswordPage from "./components/ResetPasswordPage";
 
 const App = () => {
   const [show, setShow] = useState(false);
@@ -29,11 +31,11 @@ const App = () => {
     });
   };
   const updateTasks = async (updatedTasks) => {
-    console.log("updateTasks - updatedTasks:", updatedTasks);
+    // console.log("updateTasks - updatedTasks:", updatedTasks);
     const data = await taskRequests("PUT", "/users/me/tasks", {
       tasks: updatedTasks,
     });
-    console.log("updateTasks - data:", data);
+    // console.log("updateTasks - data:", data);
 
     if (data) {
       // Merge the updatedTasks with the task IDs returned from the backend
@@ -49,12 +51,12 @@ const App = () => {
         ),
       };
 
-      console.log(
-        "Before merging tasks:",
-        JSON.stringify(mergedTasks, null, 2)
-      );
+      // console.log(
+      //   "Before merging tasks:",
+      //   JSON.stringify(mergedTasks, null, 2)
+      // );
       setTasks(mergedTasks);
-      console.log("After merging tasks:", JSON.stringify(mergedTasks, null, 2));
+      // console.log("After merging tasks:", JSON.stringify(mergedTasks, null, 2));
     }
   };
 
@@ -64,10 +66,9 @@ const App = () => {
       ...tasks,
       todo: [...tasks.todo, taskObject],
     };
-    console.log("addTask - updatedTasks:", updatedTasks); // Add this line
     await updateTasks(updatedTasks);
     toast.success("New task created");
-    console.log("new task", updatedTasks);
+    // console.log("new task", updatedTasks);
   };
 
   const mapTitleToStateKey = (title) => {
@@ -126,6 +127,7 @@ const App = () => {
   const fetchTasks = async () => {
     if (localStorage.getItem("accessToken")) {
       const data = await taskRequests("GET", "/users/me/info");
+      // console.log("Fetched tasks:", data);
       if (data) setTasks(data.tasks);
     }
   };
@@ -135,70 +137,84 @@ const App = () => {
   }, []);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Toaster richColors position="bottom-right" closeButton />
+    <BrowserRouter>
+      <DndProvider backend={HTML5Backend}>
+        <Toaster richColors position="bottom-right" closeButton />
+        <div className="d-flex flex-column justify-content-between h-screen App">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <div className=" d-flex flex-column">
+                    <NavBar fetchTasks={fetchTasks} setTasks={setTasks} />
 
-      <div className="d-flex flex-column justify-content-between h-screen App">
-        <div className=" d-flex flex-column">
-          <NavBar fetchTasks={fetchTasks} setTasks={setTasks} />
+                    <Container className="text-center w-100 d-flex justify-content-between align-items-center">
+                      <Button
+                        onClick={handleShow}
+                        className="w-100 add-task-button mt-1"
+                      >
+                        ADD NEW <HiPlus />
+                      </Button>
+                    </Container>
+                    <Container className="d-flex justify-content-between text-center big-container-task w-100">
+                      {tasks ? (
+                        <>
+                          <div className="to-do-container taks-containers">
+                            <DroppableColumn
+                              tasks={tasks.todo}
+                              title="To Do"
+                              moveTask={moveTask}
+                              onTaskClick={handleTaskClick}
+                            />
+                          </div>
+                          <div className="doing-container taks-containers">
+                            <DroppableColumn
+                              tasks={tasks.doing}
+                              title="Doing"
+                              moveTask={moveTask}
+                              onTaskClick={handleTaskClick}
+                            />
+                          </div>
 
-          <Container className="text-center w-100 d-flex justify-content-between align-items-center">
-            <Button onClick={handleShow} className="w-100 add-task-button mt-1">
-              ADD NEW <HiPlus />
-            </Button>
-          </Container>
-          <Container className="d-flex justify-content-between text-center big-container-task w-100">
-            {tasks ? (
-              <>
-                <div className="to-do-container taks-containers">
-                  <DroppableColumn
-                    tasks={tasks.todo}
-                    title="To Do"
-                    moveTask={moveTask}
-                    onTaskClick={handleTaskClick}
-                  />
-                </div>
-                <div className="doing-container taks-containers">
-                  <DroppableColumn
-                    tasks={tasks.doing}
-                    title="Doing"
-                    moveTask={moveTask}
-                    onTaskClick={handleTaskClick}
-                  />
-                </div>
+                          <div className="done-container taks-containers">
+                            <DroppableColumn
+                              tasks={tasks.done}
+                              title="Done"
+                              moveTask={moveTask}
+                              onTaskClick={handleTaskClick}
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="d-flex justify-content-center align-items-center full-screen">
+                          <div>PLEASE LOG IN...</div>
+                        </div>
+                      )}
+                    </Container>
 
-                <div className="done-container taks-containers">
-                  <DroppableColumn
-                    tasks={tasks.done}
-                    title="Done"
-                    moveTask={moveTask}
-                    onTaskClick={handleTaskClick}
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="d-flex justify-content-center align-items-center full-screen">
-                <div>PLEASE LOG IN...</div>
-              </div>
-            )}
-          </Container>
-
-          <InputModal
-            addTask={(newTask, newFile) => addTask(newTask, newFile)}
-            handleClose={handleClose}
-            handleShow={handleShow}
-            show={show}
-            setShow={setShow}
-          />
-          <TaskModal
-            show={taskModal.show}
-            task={taskModal.task}
-            onHide={() => setTaskModal({ show: false, task: null })}
-          />
+                    <InputModal
+                      addTask={(newTask, newFile) => addTask(newTask, newFile)}
+                      handleClose={handleClose}
+                      handleShow={handleShow}
+                      show={show}
+                      setShow={setShow}
+                    />
+                    <TaskModal
+                      show={taskModal.show}
+                      task={taskModal.task}
+                      onHide={() => setTaskModal({ show: false, task: null })}
+                    />
+                  </div>
+                  <DroppableBin deleteTask={deleteTask} />
+                </>
+              }
+            />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+          </Routes>
         </div>
-        <DroppableBin deleteTask={deleteTask} />
-      </div>
-    </DndProvider>
+      </DndProvider>
+    </BrowserRouter>
   );
 };
 
