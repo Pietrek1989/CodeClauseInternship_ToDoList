@@ -120,7 +120,7 @@ const App = () => {
     });
     if (data) {
       setTasks(data.tasks);
-      toast.error("Task has been deleted");
+      toast.error("Task has been deletedd");
     }
   };
 
