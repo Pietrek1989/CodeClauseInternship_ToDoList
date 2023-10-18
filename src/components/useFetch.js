@@ -208,16 +208,18 @@ export const taskRequests = async (method, endpoint, body) => {
   }
 };
 
-export const forgotPassword = async (email, e) => {
-  e.preventDefault();
+export const forgotPassword = async (email) => {
   try {
-    const response = await fetch("/email/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BE_URL}/email/forgot-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
     const data = await response.json();
     if (!response.ok) {
       return { error: data.message || "Error requesting password reset" };
@@ -231,13 +233,16 @@ export const forgotPassword = async (email, e) => {
 
 export const resetPassword = async (newPassword, token) => {
   try {
-    const response = await fetch(`/email/reset-password/${token}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ newPassword }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BE_URL}/email/reset-password/${token}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword }),
+      }
+    );
     const data = await response.json();
     if (!response.ok) {
       return { error: data.message || "Error resetting password" };

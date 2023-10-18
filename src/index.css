@@ -107,6 +107,8 @@ label {
   border-radius: 10%;
   padding: 10px;
   font-weight: bolder;
+  -webkit-text-stroke-width: 0.4px;
+  -webkit-text-stroke-color: black;
 }
 
 .avatar {
@@ -145,4 +147,7 @@ button:hover {
 
 .created-paragraph {
   color: #fe789a;
+}
+.logo:hover {
+  cursor: pointer;
 }

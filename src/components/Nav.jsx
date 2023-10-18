@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import { getUserData, handleLogOutDatabase } from "./useFetch";
 import LoginPage from "./Login";
 import UserSettingsModal from "./UserSettingsModal";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ fetchTasks, setTasks }) => {
   const [isLogged, setIsLogged] = useState(false);
@@ -10,6 +11,7 @@ const NavBar = ({ fetchTasks, setTasks }) => {
   const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
   const [formMode, setFormMode] = useState("login");
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleShowLogin = () => setShowLoginModal(true);
   const handleCloseLogin = () => setShowLoginModal(false);
@@ -61,7 +63,8 @@ const NavBar = ({ fetchTasks, setTasks }) => {
       <img
         src="/to-do-list-high-resolution-logo-color-on-transparent-background.png"
         alt="logo to do list"
-        className="mx-auto mt-1 d-flex flex-center"
+        className="mx-auto mt-1 d-flex flex-center logo"
+        onClick={() => navigate("/")}
         style={{ width: "200px" }}
       />
       <div className="position-absolute top-0 end-0 m-1 container-modal-open-button ">
@@ -75,7 +78,10 @@ const NavBar = ({ fetchTasks, setTasks }) => {
             />
           </div>
         ) : (
-          <button className="modal-open-button" onClick={handleShowLogin}>
+          <button
+            className="modal-open-button fw-bold"
+            onClick={handleShowLogin}
+          >
             LOG IN
           </button>
         )}

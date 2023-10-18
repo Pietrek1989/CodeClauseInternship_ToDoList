@@ -31,26 +31,38 @@ const LoginPage = ({
     let result;
     if (formMode === "login") {
       result = await logIn(formValues, e);
-      toast.success("Logged in successfully!");
+      setisLoading(false);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("refreshToken", result.data.refreshToken);
+        fetchUserData();
+        fetchTasks();
+        toast.success("Logged in successfully!");
+        handleClose();
+      }
     } else if (formMode === "register") {
       result = await register(formValues, e);
-      toast.success("Account created, please log in");
+      setisLoading(false);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Account created, please log in");
+        handleClose();
+      }
     } else if (formMode === "forgot") {
-      // Call your API endpoint to handle forgotten passwords
-      result = await forgotPassword(formValues.email, e);
-    }
-    setisLoading(false);
-
-    if (result.error) {
-      toast.error(result.error);
-    } else {
-      localStorage.setItem("accessToken", result.data.accessToken);
-      localStorage.setItem("refreshToken", result.data.refreshToken);
-      fetchUserData();
-      fetchTasks();
-      handleClose();
+      result = await forgotPassword(formValues.email);
+      setisLoading(false);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("The link has been sent to your E-Mail!");
+        handleClose();
+      }
     }
   };
+
   return (
     <section className="flex flex-col md:flex-row  items-center p-5">
       <div className=" w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
@@ -157,7 +169,7 @@ const LoginPage = ({
               <div className="text-center mt-4">
                 <button
                   type="submit"
-                  className="  rounded   w-24  submit-button "
+                  className="  rounded   w-24  submit-button mt-3 mb-5 "
                 >
                   Send Reset Link
                 </button>
