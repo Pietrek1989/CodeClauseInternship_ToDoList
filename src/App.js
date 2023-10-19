@@ -31,33 +31,10 @@ const App = () => {
     });
   };
   const updateTasks = async (updatedTasks) => {
-    // console.log("updateTasks - updatedTasks:", updatedTasks);
     const data = await taskRequests("PUT", "/users/me/tasks", {
       tasks: updatedTasks,
     });
-    // console.log("updateTasks - data:", data);
-
-    if (data) {
-      // Merge the updatedTasks with the task IDs returned from the backend
-      const mergedTasks = {
-        todo: updatedTasks.todo.map((task, index) =>
-          task._id ? task : { ...task, _id: data.tasks.todo[index] }
-        ),
-        doing: updatedTasks.doing.map((task, index) =>
-          task._id ? task : { ...task, _id: data.tasks.doing[index] }
-        ),
-        done: updatedTasks.done.map((task, index) =>
-          task._id ? task : { ...task, _id: data.tasks.done[index] }
-        ),
-      };
-
-      // console.log(
-      //   "Before merging tasks:",
-      //   JSON.stringify(mergedTasks, null, 2)
-      // );
-      setTasks(mergedTasks);
-      // console.log("After merging tasks:", JSON.stringify(mergedTasks, null, 2));
-    }
+    return data;
   };
 
   const addTask = async (newTask, file) => {
@@ -66,9 +43,16 @@ const App = () => {
       ...tasks,
       todo: [...tasks.todo, taskObject],
     };
-    await updateTasks(updatedTasks);
-    toast.success("New task created");
-    // console.log("new task", updatedTasks);
+
+    const data = await updateTasks(updatedTasks);
+    if (data && data.tasks) {
+      // Update the local state with the server response
+      setTasks(data.tasks);
+      toast.success("New task created");
+    } else {
+      toast.error("Failed to create new task");
+      console.error("Unexpected data format:", data);
+    }
   };
 
   const mapTitleToStateKey = (title) => {
@@ -85,9 +69,10 @@ const App = () => {
       const newTasks = { ...tasks };
       const fromKey = mapTitleToStateKey(fromColumn);
       const toKey = mapTitleToStateKey(toColumn);
-      const [movedTask] = newTasks[fromKey].splice(fromIndex, 1); // Remove the task from its old position
+      const [movedTask] = newTasks[fromKey].splice(fromIndex, 1);
+      newTasks[toKey].splice(dropTargetIndex, 0, movedTask);
 
-      newTasks[toKey].splice(dropTargetIndex, 0, movedTask); // Insert the task at its new position
+      setTasks(newTasks);
 
       if (fromColumn !== toColumn) {
         // If moving across columns, update the movedAt property
@@ -96,13 +81,9 @@ const App = () => {
       }
 
       // Send the request to update all tasks
-      const data = await taskRequests("PUT", "/users/me/tasks", {
-        tasks: newTasks,
-      });
-
+      const data = await updateTasks(newTasks);
       if (data && data.tasks) {
-        // Fetch the tasks again to ensure client-side state is in sync with server
-        await fetchTasks();
+        setTasks(data.tasks); // Update state with server response
       } else {
         console.error("Unexpected data format:", data);
       }
