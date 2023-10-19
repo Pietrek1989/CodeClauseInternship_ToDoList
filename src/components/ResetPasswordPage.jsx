@@ -1,4 +1,3 @@
-// ResetPasswordPage.js
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { resetPassword } from "./useFetch";
@@ -31,13 +30,6 @@ const ResetPasswordPage = () => {
       <NavBar />
       <section className="flex items-center justify-center p-5 my-auto">
         <div className="form d-flex flex-column align-items-center justify-content-center">
-          {/* <img
-          src="/to-do-list-high-resolution-logo-color-on-transparent-background.png"
-          alt="logo to do list"
-          className="mx-auto mt-1 d-flex flex-center logo"
-          style={{ width: "200px" }}
-          onClick={() => navigate("/")}
-        /> */}
           <form action="#" method="POST" onSubmit={handleSubmit}>
             <div className="mt-2 d-flex flex-column justify-center">
               <label className="text-center fs-2 fw-bold ">New Password:</label>
