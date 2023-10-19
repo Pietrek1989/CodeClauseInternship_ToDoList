@@ -69,7 +69,11 @@ const NavBar = ({ fetchTasks, setTasks }) => {
       />
       <div className="position-absolute top-0 end-0 m-1 container-modal-open-button ">
         {isLogged ? (
-          <div onClick={handleShowUserSettings} style={{ cursor: "pointer" }}>
+          <div
+            onClick={handleShowUserSettings}
+            style={{ cursor: "pointer" }}
+            className="login-parent rounded px-1"
+          >
             <span className="fw-bold name">Hello {userData?.username}</span>
             <img
               src={userData?.avatar}

@@ -119,7 +119,7 @@ label {
 }
 
 .name {
-  color: #5d2957;
+  color: white;
 }
 button:hover {
   scale: 1.05;
@@ -150,4 +150,9 @@ button:hover {
 }
 .logo:hover {
   cursor: pointer;
+}
+
+.login-parent {
+  background-color: #8454b2;
+  padding-block: 2px;
 }
