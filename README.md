@@ -1,8 +1,10 @@
-# To-Do List with Drag-and-Drop Functionality
+# Full-Stack To-Do List with Drag-and-Drop Functionality
+
+## The full app is in login-feature branch to keep the old version running
 
 ## Overview
 
-This is a full-stack To-Do List application built using React, and integrated with a drag-and-drop feature to allow easy task management. Users can add tasks, and use GIPHY api to optionally add a gif to the them. User can then move them across different columns, and delete them by dragging them to a bin. The application has a responsive design and persists tasks using Local Storage.
+This is a full-stack To-Do List application developed with a front-end built using React, and a back-end implemented with MongoDB for data persistence. The application incorporates a user-friendly drag-and-drop feature for easy task management. Users can add tasks, and optionally enrich them with gifs via the GIPHY API. Tasks can be moved across different columns representing their status, and deleted by dragging them to a bin. The application is designed with a responsive layout and employs JWT for secure authentication, along with hashed passwords for enhanced security and google log in for convienience. User-friendly alerts (toasts) are facilitated through the [Sonner] package, enhancing the user experience with visually appealing notifications. The back-end repository can be found [here](https://github.com/Pietrek1989/toDoList-backEnd).
 
 ## Table of Contents
 
@@ -15,19 +17,26 @@ This is a full-stack To-Do List application built using React, and integrated wi
 ## Features
 
 - **Add Tasks**: Users can add new tasks through a modal.
-- **Add Gifs**: User can add optionally gif using GIPHY api.
-- **View Tasks**: Tasks are displayed in 3 columns: To-Do, Doing, and Done.
-- **Move Tasks**: Drag-and-drop tasks to move them between columns.
+- **Add Gifs**: Users can optionally enrich tasks with gifs using the GIPHY API.
+- **View Tasks**: Tasks are displayed in three columns: To-Do, Doing, and Done.
+- **Move Tasks**: Users can drag-and-drop tasks to move them between columns.
 - **Delete Tasks**: Drag tasks to the bin to delete them.
-- **Persistent Storage**: Tasks are saved in Local Storage for persistence.
+- **Persistent Storage**: Tasks are saved in the user's account on the database, ensuring that data is not lost between sessions.
 
 ## Technologies Used
 
 - React.js
 - React DnD (Drag and Drop)
-- Local Storage for persistent data
+- MongoDB for data persistence
+- Google Auth for convienience
+- Express.js and Node.js for the back-end server
+- JWT for secure authentication
+- Bcrypt for password hashing
+- Sonner for user-friendly alerts (toasts)
 - HTML5
 - CSS
+- [Back-end Repository](https://github.com/Pietrek1989/toDoList-backEnd)
+
 ![ToDoList](https://github.com/Pietrek1989/CodeClauseInternship_ToDoList/assets/68666992/ebf6cca6-7c6d-486e-858d-071400bfc7e7)
 
 ## How to Run Locally
@@ -65,4 +74,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## License
 
 MIT
+
 
