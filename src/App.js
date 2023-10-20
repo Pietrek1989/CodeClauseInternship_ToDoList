@@ -65,6 +65,8 @@ const App = () => {
   };
 
   const moveTask = async (fromIndex, fromColumn, toColumn, dropTargetIndex) => {
+    const previousTasks = { ...tasks }; // Save the previous state
+
     try {
       const newTasks = { ...tasks };
       const fromKey = mapTitleToStateKey(fromColumn);
@@ -72,7 +74,7 @@ const App = () => {
       const [movedTask] = newTasks[fromKey].splice(fromIndex, 1);
       newTasks[toKey].splice(dropTargetIndex, 0, movedTask);
 
-      setTasks(newTasks);
+      setTasks(newTasks); // Update the UI optimistically
 
       if (fromColumn !== toColumn) {
         // If moving across columns, update the movedAt property
@@ -86,9 +88,11 @@ const App = () => {
         setTasks(data.tasks); // Update state with server response
       } else {
         console.error("Unexpected data format:", data);
+        setTasks(previousTasks); // Revert to previous state if there's an error
       }
     } catch (error) {
       console.error("Failed to move task:", error);
+      setTasks(previousTasks); // Revert to previous state if there's an error
     }
   };
 

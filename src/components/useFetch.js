@@ -83,6 +83,31 @@ export const taskRequests = async (method, endpoint, body) => {
         console.warn("Unexpected content type:", contentType);
         throw new Error(`Unexpected content type: ${contentType}`);
       }
+    } else if (response.status === 401) {
+      // access token has expired or is invalid, refresh access token
+      await refreshAccessToken();
+      // try to get user data again
+      const newAccessToken = localStorage.getItem("accessToken");
+      // console.log("the updated access", newAccessToken);
+      if (newAccessToken) {
+        const response = await fetch(
+          `${process.env.REACT_APP_BE_URL}${endpoint}`,
+          {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: body && JSON.stringify(body),
+          }
+        );
+        if (response.ok) {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.indexOf("application/json") !== -1) {
+            return await response.json();
+          }
+        }
+      }
     } else {
       const errorText = await response.text();
       console.error(`Failed to ${method} data:`, errorText);
