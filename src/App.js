@@ -19,7 +19,13 @@ const App = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [tasks, setTasks] = useState({ todo: [], doing: [], done: [] });
+  const [tasks, setTasks] = useState({
+    version: 0,
+    todo: [],
+    doing: [],
+    done: [],
+  });
+
   const [taskModal, setTaskModal] = useState({
     show: false,
     task: null,
@@ -84,7 +90,7 @@ const App = () => {
 
       // Send the request to update all tasks
       const data = await updateTasks(newTasks);
-      if (data && data.tasks) {
+      if (data && data.tasks && data.tasks.version > tasks.version) {
         setTasks(data.tasks); // Update state with server response
       } else {
         console.error("Unexpected data format:", data);
