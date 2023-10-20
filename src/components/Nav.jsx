@@ -33,7 +33,7 @@ const NavBar = ({ fetchTasks, setTasks }) => {
     if (data) {
       setUserData(data);
       setIsLogged(true);
-      console.log("data user", data);
+      // console.log("data user", data);
     }
   };
   useEffect(() => {
