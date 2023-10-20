@@ -6,6 +6,9 @@
 
 This is a full-stack To-Do List application developed with a front-end built using React, and a back-end implemented with MongoDB for data persistence. The application incorporates a user-friendly drag-and-drop feature for easy task management. Users can add tasks, and optionally enrich them with gifs via the GIPHY API. Tasks can be moved across different columns representing their status, and deleted by dragging them to a bin. The application is designed with a responsive layout and employs JWT for secure authentication, along with hashed passwords for enhanced security and google log in for convienience. User-friendly alerts (toasts) are facilitated through the [Sonner] package, enhancing the user experience with visually appealing notifications. The back-end repository can be found [here](https://github.com/Pietrek1989/toDoList-backEnd).
 
+### 
+- [Live-app](https://code-clause-internship-to-do-list-login-feature.vercel.app)
+
 ## Table of Contents
 
 - [Features](#features)
@@ -36,6 +39,7 @@ This is a full-stack To-Do List application developed with a front-end built usi
 - HTML5
 - CSS
 - [Back-end Repository](https://github.com/Pietrek1989/toDoList-backEnd)
+- [Live-app](https://code-clause-internship-to-do-list-login-feature.vercel.app)
 
 ![ToDoList](https://github.com/Pietrek1989/CodeClauseInternship_ToDoList/assets/68666992/ebf6cca6-7c6d-486e-858d-071400bfc7e7)
 
